@@ -64,16 +64,21 @@ class _SimplePickerState extends State<SimplePicker> {
         itemBuilder: (context, index) {
           print(widget.selectedItemIndex);
           return Center(
-            child: Text(
-              widget.items[index],
+            child: AnimatedDefaultTextStyle(
               style: (widget.selectedItemIndex == index
                       ? widget.selectedTextStyle
                       : (widget.selectedItemIndex - index).abs() == 1
                           ? widget.selectedTextStyle!.copyWith(
                               color: widget.textStyle.color,
-                              fontWeight: FontWeight.w600)
+                              fontWeight: FontWeight.w600,
+                              fontSize: widget.textStyle.fontSize! * 1.2,
+                              backgroundColor: Colors.transparent)
                           : widget.textStyle)!
                   .copyWith(letterSpacing: 1.0),
+              duration: Durations.medium4,
+              child: Text(
+                widget.items[index],
+              ),
             ),
           );
         },

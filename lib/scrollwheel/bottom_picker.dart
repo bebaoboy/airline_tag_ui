@@ -1,5 +1,6 @@
 import 'package:airline_tag_ui/scrollwheel/resources/arrays.dart';
 import 'package:airline_tag_ui/scrollwheel/resources/time.dart';
+import 'package:airline_tag_ui/scrollwheel/widgets/animated_tile.dart';
 import 'package:airline_tag_ui/scrollwheel/widgets/bottom_picker_button.dart';
 import 'package:airline_tag_ui/scrollwheel/widgets/close_icon.dart';
 import 'package:airline_tag_ui/scrollwheel/widgets/simple_picker.dart';
@@ -56,187 +57,7 @@ class BottomPicker extends StatefulWidget {
       assert(selectedItemIndex < items!.length);
     }
   }
-  BottomPicker.date({
-    super.key,
-    required this.pickerTitle,
-    this.pickerDescription,
-    this.titlePadding = const EdgeInsets.all(0),
-    this.titleAlignment,
-    this.dismissable = true,
-    this.onChange,
-    this.onSubmit,
-    this.onClose,
-    this.bottomPickerTheme = BottomPickerTheme.blue,
-    this.gradientColors,
-    this.initialDateTime,
-    this.minDateTime,
-    this.maxDateTime,
-    this.buttonPadding,
-    this.buttonWidth,
-    this.buttonSingleColor,
-    this.backgroundColor = Colors.white,
-    this.dateOrder = DatePickerDateOrder.ymd,
-    this.pickerTextStyle = const TextStyle(
-      fontSize: 14,
-      color: Colors.black,
-    ),
-    this.displayCloseIcon = true,
-    this.closeIconColor = Colors.white,
-    this.closeIconSize = 20,
-    this.layoutOrientation = TextDirection.ltr,
-    this.buttonAlignment = MainAxisAlignment.center,
-    this.height,
-    this.displaySubmitButton = true,
-    this.buttonContent,
-    this.buttonStyle,
-    this.selectedTextStyle,
-  }) {
-    datePickerMode = CupertinoDatePickerMode.date;
-    bottomPickerType = BottomPickerType.dateTime;
-    use24hFormat = false;
-    itemExtent = 0;
-    onRangeDateSubmitPressed = null;
-    assertInitialValues();
-  }
-  BottomPicker.dateTime({
-    super.key,
-    required this.pickerTitle,
-    this.pickerDescription,
-    this.titlePadding = const EdgeInsets.all(0),
-    this.titleAlignment,
-    this.dismissable = true,
-    this.onChange,
-    this.onSubmit,
-    this.onClose,
-    this.bottomPickerTheme = BottomPickerTheme.blue,
-    this.gradientColors,
-    this.initialDateTime,
-    this.minuteInterval,
-    this.minDateTime,
-    this.maxDateTime,
-    this.use24hFormat = false,
-    this.buttonPadding,
-    this.buttonWidth,
-    this.buttonSingleColor,
-    this.backgroundColor = Colors.white,
-    this.dateOrder = DatePickerDateOrder.ymd,
-    this.pickerTextStyle = const TextStyle(
-      fontSize: 14,
-      color: Colors.black,
-    ),
-    this.displayCloseIcon = true,
-    this.closeIconColor = Colors.white,
-    this.closeIconSize = 20,
-    this.layoutOrientation = TextDirection.ltr,
-    this.buttonAlignment = MainAxisAlignment.center,
-    this.height,
-    this.displaySubmitButton = true,
-    this.buttonContent,
-    this.buttonStyle,
-    this.selectedTextStyle,
-  }) {
-    datePickerMode = CupertinoDatePickerMode.dateAndTime;
-    bottomPickerType = BottomPickerType.dateTime;
-    itemExtent = 0;
-    onRangeDateSubmitPressed = null;
-    assertInitialValues();
-  }
-  BottomPicker.time({
-    super.key,
-    required this.pickerTitle,
-    this.pickerDescription,
-    required this.initialTime,
-    this.maxTime,
-    this.minTime,
-    this.titlePadding = const EdgeInsets.all(0),
-    this.titleAlignment,
-    this.dismissable = true,
-    this.onChange,
-    this.onSubmit,
-    this.onClose,
-    this.bottomPickerTheme = BottomPickerTheme.blue,
-    this.gradientColors,
-    this.minuteInterval = 1,
-    this.use24hFormat = false,
-    this.buttonPadding,
-    this.buttonWidth,
-    this.buttonSingleColor,
-    this.backgroundColor = Colors.white,
-    this.pickerTextStyle = const TextStyle(
-      fontSize: 14,
-      color: Colors.black,
-    ),
-    this.displayCloseIcon = true,
-    this.closeIconColor = Colors.white,
-    this.closeIconSize = 20,
-    this.layoutOrientation = TextDirection.ltr,
-    this.buttonAlignment = MainAxisAlignment.center,
-    this.height,
-    this.displaySubmitButton = true,
-    this.buttonContent,
-    this.buttonStyle,
-    this.selectedTextStyle,
-  }) {
-    datePickerMode = CupertinoDatePickerMode.time;
-    bottomPickerType = BottomPickerType.time;
-    dateOrder = null;
-    itemExtent = 0;
-    onRangeDateSubmitPressed = null;
-    initialDateTime = null;
-    assertInitialValues();
-  }
-  BottomPicker.range({
-    super.key,
-    required this.pickerTitle,
-    this.pickerDescription,
-    required this.onRangeDateSubmitPressed,
-    this.titlePadding = const EdgeInsets.all(0),
-    this.titleAlignment,
-    this.dismissable = true,
-    this.onClose,
-    this.bottomPickerTheme = BottomPickerTheme.blue,
-    this.gradientColors,
-    this.buttonPadding,
-    this.buttonWidth,
-    this.buttonSingleColor,
-    this.backgroundColor = Colors.white,
-    this.pickerTextStyle = const TextStyle(
-      fontSize: 14,
-      color: Colors.black,
-    ),
-    this.displayCloseIcon = true,
-    this.closeIconColor = Colors.white,
-    this.closeIconSize = 20,
-    this.layoutOrientation = TextDirection.ltr,
-    this.buttonAlignment = MainAxisAlignment.center,
-    this.height,
-    this.initialSecondDate,
-    this.initialFirstDate,
-    this.minFirstDate,
-    this.minSecondDate,
-    this.maxFirstDate,
-    this.maxSecondDate,
-    this.dateOrder = DatePickerDateOrder.ymd,
-    this.buttonContent,
-    this.buttonStyle,
-    this.selectedTextStyle,
-  }) {
-    datePickerMode = CupertinoDatePickerMode.date;
-    bottomPickerType = BottomPickerType.rangeDateTime;
-    dateOrder = null;
-    itemExtent = 0;
-    onChange = null;
-    onSubmit = null;
-    displaySubmitButton = true;
-    assert(onRangeDateSubmitPressed != null);
-    assertInitialValues();
-    if (minSecondDate != null && initialSecondDate != null) {
-      assert(initialSecondDate!.isAfter(minSecondDate!));
-    }
-    if (minFirstDate != null && initialFirstDate != null) {
-      assert(initialFirstDate!.isAfter(minFirstDate!));
-    }
-  }
+
   final Widget pickerTitle;
   final Widget? pickerDescription;
   final EdgeInsetsGeometry titlePadding;
@@ -286,7 +107,11 @@ class BottomPicker extends StatefulWidget {
     showModalBottomSheet(
       context: context,
       isDismissible: dismissable,
-      enableDrag: true,
+      enableDrag: false,
+      sheetAnimationStyle: AnimationStyle(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+          reverseCurve: Curves.easeOut),
       isScrollControlled: true,
       constraints: BoxConstraints(
         maxWidth: context.bottomPickerWidth,
@@ -309,7 +134,25 @@ class BottomPicker extends StatefulWidget {
   BottomPickerState createState() => BottomPickerState();
 }
 
-class BottomPickerState extends State<BottomPicker> {
+class BottomPickerState extends State<BottomPicker>
+    with TickerProviderStateMixin {
+  //animation
+  late AnimationController animationController;
+  late Animation<double> animation;
+
+  void startAnimation() {
+    //if you want to call it again, e.g. after pushing and popping
+    //a screen, you will need to reset to 0. Otherwise won't work.
+    animationController.value = 0;
+    animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   late int selectedItemIndex;
   late DateTime selectedDateTime;
   late DateTime selectedFirstDateTime =
@@ -318,6 +161,15 @@ class BottomPickerState extends State<BottomPicker> {
       widget.initialSecondDate ?? DateTime.now();
   @override
   void initState() {
+    //animation controller - this sets the timing
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);
+    //let's give the movement some style, not linear
+    animation = CurvedAnimation(
+        parent: animationController, curve: Curves.fastOutSlowIn);
+
+    startAnimation();
+
     super.initState();
     if (widget.bottomPickerType == BottomPickerType.simple) {
       selectedItemIndex = widget.selectedItemIndex;
@@ -326,157 +178,255 @@ class BottomPickerState extends State<BottomPicker> {
     } else {
       selectedDateTime = widget.initialDateTime ?? DateTime.now();
     }
+    _selectedTextStyle = widget.selectedTextStyle;
   }
+
+  List<int> slide = [60, 120, 150];
+  bool exit = false;
+  TextStyle? _selectedTextStyle;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      height: widget.height ?? context.bottomPickerHeight,
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(40),
-          topLeft: Radius.circular(40),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  bottomRight: Radius.elliptical(100, 150)),
-              child: Container(
-                color: const Color.fromARGB(255, 37, 94, 227),
-                width: MediaQuery.of(context).size.width - 20,
-                height: MediaQuery.of(context).size.height / 2 + 30,
-              ),
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollStartNotification) {
+          // _onStartScroll(scrollNotification.metrics);
+          return true;
+        } else if (scrollNotification is ScrollUpdateNotification) {
+          // _onUpdateScroll(scrollNotification.metrics);
+          return true;
+        } else if (scrollNotification is ScrollEndNotification) {
+          if (!exit) {
+            exit = true;
+            Future.delayed(const Duration(seconds: 2), () {
+              print(widget.items![selectedItemIndex]);
+              Navigator.of(context).pop();
+            });
+            Future.delayed(const Duration(milliseconds: 500), () {
+              setState(() {
+                _selectedTextStyle = widget.selectedTextStyle?.copyWith(
+                    color: Colors.blue,
+                    fontSize: 20,
+                    backgroundColor: Colors.white);
+              });
+            });
+          }
+          return true;
+        }
+        return false;
+      },
+      child: Container(
+          clipBehavior: Clip.antiAlias,
+          height: widget.height ?? context.bottomPickerHeight,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                Colors.white,
+                widget.backgroundColor,
+                widget.backgroundColor,
+                widget.backgroundColor
+              ], // Gradient from https://learnui.design/tools/gradient-generator.html
+              tileMode: TileMode.mirror,
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height / 2 - 30,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topRight: Radius.elliptical(100, 150)),
-                child: Container(
-                  color: const Color.fromARGB(255, 37, 94, 227),
-                  width: MediaQuery.of(context).size.width - 20,
-                  height: MediaQuery.of(context).size.height / 2 + 70,
+            // color: widget.backgroundColor,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(40),
+              topLeft: Radius.circular(40),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      bottomRight: Radius.elliptical(100, 150)),
+                  child: Container(
+                    // color: const Color.fromARGB(255, 37, 94, 227),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          // Colors.white,
+                          Color.fromARGB(255, 130, 161, 232),
+                          Color.fromARGB(255, 37, 94, 200),
+                          Color.fromARGB(255, 37, 94, 227)
+                        ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                        tileMode: TileMode.mirror,
+                      ),
+                    ),
+
+                    width: MediaQuery.of(context).size.width - 20,
+                    height: MediaQuery.of(context).size.height / 2 + 30,
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 80, 28, 28),
-              child: widget.pickerTitle,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 40, top: 20),
-              child: Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(right: 20, left: 20, top: 20),
-                    child: Directionality(
-                      textDirection: widget.layoutOrientation,
+                Positioned(
+                  top: MediaQuery.of(context).size.height / 2 - 30,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.elliptical(100, 150)),
+                    child: Container(
+                      // color: const Color.fromARGB(255, 37, 94, 227),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            // Colors.white,
+                            Color.fromARGB(255, 37, 94, 227),
+                            Color.fromARGB(255, 37, 94, 227),
+                            Color.fromARGB(255, 14, 78, 228)
+                          ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                          tileMode: TileMode.mirror,
+                        ),
+                      ),
+                      width: MediaQuery.of(context).size.width - 20,
+                      height: MediaQuery.of(context).size.height / 2 + 70,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(28, 80, 28, 28),
+                  child: AnimatedTile(
+                      chainCurve: const Interval(
+                        0.3,
+                        0.7,
+                        curve: Curves.ease,
+                      ),
+                      slide: slide[1],
+                      animation: animation,
+                      child: widget.pickerTitle),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(right: 40, top: 20),
+                    child: AnimatedTile(
+                      chainCurve: const Interval(
+                        0.8,
+                        1,
+                        curve: Curves.ease,
+                      ),
+                      slide: slide[2],
+                      animation: animation,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: widget.titlePadding,
-                            child: const Row(
-                              children: [
-                                // Expanded(child: widget.pickerTitle),
-                                // if (widget.displayCloseIcon)
-                                //   CloseIcon(
-                                //     onPress: _closeBottomPicker,
-                                //     iconColor: widget.closeIconColor,
-                                //     closeIconSize: widget.closeIconSize,
-                                //   ),
-                              ],
+                            padding: const EdgeInsets.only(
+                                right: 20, left: 20, top: 20),
+                            child: Directionality(
+                              textDirection: widget.layoutOrientation,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: widget.titlePadding,
+                                    child: const Row(
+                                      children: [
+                                        // Expanded(child: widget.pickerTitle),
+                                        // if (widget.displayCloseIcon)
+                                        //   CloseIcon(
+                                        //     onPress: _closeBottomPicker,
+                                        //     iconColor: widget.closeIconColor,
+                                        //     closeIconSize: widget.closeIconSize,
+                                        //   ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (widget.pickerDescription != null)
+                                    widget.pickerDescription!,
+                                ],
+                              ),
                             ),
                           ),
-                          if (widget.pickerDescription != null)
-                            widget.pickerDescription!,
+                          Expanded(
+                              child: widget.bottomPickerType ==
+                                      BottomPickerType.simple
+                                  ? SimplePicker(
+                                      items: widget.items!,
+                                      onChange: (int index) {
+                                        selectedItemIndex = index;
+                                        setState(() {});
+                                        print(index);
+                                        widget.onChange?.call(index);
+                                      },
+                                      selectedItemIndex: selectedItemIndex,
+                                      textStyle: widget.pickerTextStyle,
+                                      selectedTextStyle: _selectedTextStyle,
+                                      itemExtent: widget.itemExtent,
+                                      selectionOverlay: widget.selectionOverlay,
+                                    )
+                                  : Container()),
+                          if (widget.displaySubmitButton)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: widget.buttonAlignment,
+                                children: [
+                                  BottomPickerButton(
+                                    onClick: () {
+                                      if (widget.bottomPickerType ==
+                                          BottomPickerType.rangeDateTime) {
+                                        widget.onRangeDateSubmitPressed?.call(
+                                          selectedFirstDateTime,
+                                          selectedSecondDateTime,
+                                        );
+                                      } else if (widget.bottomPickerType ==
+                                              BottomPickerType.dateTime ||
+                                          widget.bottomPickerType ==
+                                              BottomPickerType.time) {
+                                        widget.onSubmit?.call(selectedDateTime);
+                                      } else {
+                                        widget.onSubmit
+                                            ?.call(selectedItemIndex);
+                                      }
+                                      Navigator.pop(context);
+                                    },
+                                    gradientColors: widget.gradientColor,
+                                    buttonPadding: widget.buttonPadding,
+                                    buttonWidth: widget.buttonWidth,
+                                    solidColor: widget.buttonSingleColor,
+                                    buttonChild: widget.buttonContent,
+                                    style: widget.buttonStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
                         ],
+                      ),
+                    )),
+                const Align(
+                  alignment: Alignment(0.93, 0.05),
+                  child: Icon(
+                    size: 25,
+                    Icons.timer,
+                  ),
+                ),
+                if (widget.displayCloseIcon)
+                  AnimatedTile(
+                    chainCurve: const Interval(
+                      0.0,
+                      0.5,
+                      curve: Curves.ease,
+                    ),
+                    slide: slide[0],
+                    animation: animation,
+                    child: Align(
+                      alignment: const Alignment(-0.87, -0.92),
+                      child: CloseIcon(
+                        onPress: _closeBottomPicker,
+                        iconColor: widget.closeIconColor,
+                        closeIconSize: widget.closeIconSize,
                       ),
                     ),
                   ),
-                  Expanded(
-                      child: widget.bottomPickerType == BottomPickerType.simple
-                          ? SimplePicker(
-                              items: widget.items!,
-                              onChange: (int index) {
-                                selectedItemIndex = index;
-                                setState(() {});
-                                print(index);
-                                widget.onChange?.call(index);
-                              },
-                              selectedItemIndex: selectedItemIndex,
-                              textStyle: widget.pickerTextStyle,
-                              selectedTextStyle: widget.selectedTextStyle,
-                              itemExtent: widget.itemExtent,
-                              selectionOverlay: widget.selectionOverlay,
-                            )
-                          : Container()),
-                  if (widget.displaySubmitButton)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: widget.buttonAlignment,
-                        children: [
-                          BottomPickerButton(
-                            onClick: () {
-                              if (widget.bottomPickerType ==
-                                  BottomPickerType.rangeDateTime) {
-                                widget.onRangeDateSubmitPressed?.call(
-                                  selectedFirstDateTime,
-                                  selectedSecondDateTime,
-                                );
-                              } else if (widget.bottomPickerType ==
-                                      BottomPickerType.dateTime ||
-                                  widget.bottomPickerType ==
-                                      BottomPickerType.time) {
-                                widget.onSubmit?.call(selectedDateTime);
-                              } else {
-                                widget.onSubmit?.call(selectedItemIndex);
-                              }
-                              Navigator.pop(context);
-                            },
-                            gradientColors: widget.gradientColor,
-                            buttonPadding: widget.buttonPadding,
-                            buttonWidth: widget.buttonWidth,
-                            solidColor: widget.buttonSingleColor,
-                            buttonChild: widget.buttonContent,
-                            style: widget.buttonStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+              ],
             ),
-            const Align(
-              alignment: Alignment(0.93, 0.05),
-              child: Icon(
-                size: 25,
-                Icons.timer,
-              ),
-            ),
-            if (widget.displayCloseIcon)
-              Align(
-                alignment: const Alignment(-0.87, -0.92),
-                child: CloseIcon(
-                  onPress: _closeBottomPicker,
-                  iconColor: widget.closeIconColor,
-                  closeIconSize: widget.closeIconSize,
-                ),
-              ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
