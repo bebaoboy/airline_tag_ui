@@ -37,6 +37,8 @@ dependencies:
   bottom_picker: any
   intl: any
   widget_and_text_animator: any
+  barcode: any
+  flutter_svg: any
 
 dev_dependencies:
   flutter_test:

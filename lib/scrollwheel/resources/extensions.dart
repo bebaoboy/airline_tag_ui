@@ -1,4 +1,4 @@
-import 'package:airline_tag_ui/scrollwheel/bottom_picker.dart';
+import 'package:airline_tag_ui/scrollwheel/widgets/bottom_picker.dart';
 import 'package:airline_tag_ui/scrollwheel/resources/arrays.dart';
 import 'package:flutter/material.dart';
 

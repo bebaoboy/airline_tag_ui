@@ -1,7 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:airline_tag_ui/scrollwheel/bottom_picker.dart';
+import 'package:airline_tag_ui/scrollwheel/widgets/bottom_picker.dart';
 import 'package:airline_tag_ui/scrollwheel/resources/arrays.dart';
+import 'package:airline_tag_ui/scrollwheel/widgets/ticket.dart';
+import 'package:barcode/barcode.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
@@ -21,17 +23,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
       ),
       home: const Scaffold(
-        body: ExampleApp(),
+        body: TicketPage(),
       ),
     );
   }
 }
 
-class ExampleApp extends StatefulWidget {
-  const ExampleApp({super.key});
+class TicketPage extends StatefulWidget {
+  const TicketPage({super.key});
 
   @override
-  State<ExampleApp> createState() => _ExampleAppState();
+  State<TicketPage> createState() => _TicketPageState();
 }
 
 List<DateTime> getHoursInBetween(DateTime startDate, DateTime endDate) {
@@ -42,7 +44,7 @@ List<DateTime> getHoursInBetween(DateTime startDate, DateTime endDate) {
   return days;
 }
 
-class _ExampleAppState extends State<ExampleApp> {
+class _TicketPageState extends State<TicketPage> {
   final countryList = [
     'Algeria 🇩🇿',
     'Maroco 🇲🇦',
@@ -100,40 +102,75 @@ class _ExampleAppState extends State<ExampleApp> {
   ];
 
   final buttonWidth = 300.0;
+  late final String barcode;
+
+  @override
+  void initState() {
+    super.initState();
+    // Create a DataMatrix barcode
+    final dm = Barcode.code93();
+
+    // Generate a SVG with "Hello World!"
+    barcode = dm.toSvg('893842928347827348', width: 250, drawText: false);
+
+    // Save the image
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xffF6F2F2),
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.network(
-            'https://github.com/koukibadr/Bottom-Picker/blob/main/example/bottom_picker_logo.gif?raw=true',
-            width: 200,
-          ),
-          SizedBox(
-            width: buttonWidth,
-            child: ElevatedButton(
-              onPressed: () {
-                _openSimpleItemPicker(
-                    context,
-                    getHoursInBetween(
-                            DateTime.now().subtract(const Duration(days: 3)),
-                            DateTime.now().add(const Duration(days: 3)))
-                        .map(
-                          (e) =>
-                              "${DateFormat("HH:mm a").format(e)} - ${DateFormat("HH:mm a").format(e.add(const Duration(hours: 1)))}",
-                        )
-                        .toList());
-              },
-              child: const Text('Simple Item picker'),
-            ),
-          ),
-        ],
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            // Colors.white,
+            Color.fromARGB(255, 37, 94, 200),
+            Color.fromARGB(255, 37, 94, 200),
+            Color.fromARGB(255, 37, 94, 227)
+          ], // Gradient from https://learnui.design/tools/gradient-generator.html
+          tileMode: TileMode.mirror,
+        ),
       ),
+      width: double.infinity,
+      child: TicketItem(
+        barcode: barcode,
+        backgroundColor: Color.fromARGB(255, 37, 94, 227),
+        onTap: () {
+          _openSimpleItemPicker(
+              context,
+              getHoursInBetween(
+                      DateTime.now().subtract(const Duration(days: 3)),
+                      DateTime.now().add(const Duration(days: 3)))
+                  .map(
+                    (e) =>
+                        "${DateFormat("HH:mm a").format(e)} - ${DateFormat("HH:mm a").format(e.add(const Duration(hours: 1)))}",
+                  )
+                  .toList());
+        },
+      ),
+      // Image.network(
+      //   'https://github.com/koukibadr/Bottom-Picker/blob/main/example/bottom_picker_logo.gif?raw=true',
+      //   width: 200,
+      // ),
+      // SizedBox(
+      //   width: buttonWidth,
+      //   child: ElevatedButton(
+      //     onPressed: () {
+      //       _openSimpleItemPicker(
+      //           context,
+      //           getHoursInBetween(
+      //                   DateTime.now().subtract(const Duration(days: 3)),
+      //                   DateTime.now().add(const Duration(days: 3)))
+      //               .map(
+      //                 (e) =>
+      //                     "${DateFormat("HH:mm a").format(e)} - ${DateFormat("HH:mm a").format(e.add(const Duration(hours: 1)))}",
+      //               )
+      //               .toList());
+      //     },
+      //     child: const Text('Simple Item picker'),
+      //   ),
+      // ),
     );
   }
 
