@@ -5,7 +5,6 @@ import 'package:airline_tag_ui/scrollwheel/resources/arrays.dart';
 import 'package:airline_tag_ui/scrollwheel/widgets/ticket.dart';
 import 'package:barcode/barcode.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' hide TextDirection;
 
 void main() {
   runApp(const MyApp());
@@ -194,13 +193,17 @@ class _TicketPageState extends State<TicketPage> {
       selectedTextStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 107, 237, 251)),
+          color: Color.fromARGB(255, 107, 237, 251),
+          shadows: [Shadow(color: Color.fromARGB(255, 107, 237, 251))]),
       pickerTextStyle: const TextStyle(
           fontSize: 12, color: Colors.white, fontWeight: FontWeight.w900),
       pickerTitle: const Text(
         'Schedule',
         style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white),
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+          color: Colors.white,
+        ),
       ),
       onChange: (p0) {
         print(p0);

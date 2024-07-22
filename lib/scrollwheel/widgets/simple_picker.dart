@@ -61,8 +61,8 @@ class _SimplePickerState extends State<SimplePicker> {
         childCount: widget.items.length,
         magnification: 1.2,
         squeeze: 0.9,
-        selectionOverlay: widget.selectionOverlay ??
-            const CupertinoPickerDefaultSelectionOverlay(),
+        // selectionOverlay: widget.selectionOverlay ??
+        //      CupertinoPickerDefaultSelectionOverlay(background: Colors.white.withOpacity(0.5),),
         scrollController: FixedExtentScrollController(
           initialItem: widget.selectedItemIndex,
         ),
@@ -78,8 +78,7 @@ class _SimplePickerState extends State<SimplePicker> {
                             letterSpacing: 1.0,
                             fontWeight:
                                 widget.endEffect ? FontWeight.w900 : null,
-                                fontSize: widget.endEffect ? 18 : null
-                            ),
+                            fontSize: widget.endEffect ? 18 : null),
                         duration: Durations.medium4,
                         child: Text(
                           widget.items[index],
@@ -92,6 +91,7 @@ class _SimplePickerState extends State<SimplePicker> {
                               color: widget.textStyle.color,
                               fontWeight: FontWeight.w600,
                               fontSize: widget.textStyle.fontSize! * 1.2,
+                              shadows: [],
                               backgroundColor: Colors.transparent)
                           : widget.textStyle.copyWith(letterSpacing: 1.0),
                       duration: Durations.medium2,
@@ -264,7 +264,7 @@ class _CupertinoPickerState extends State<CustomCupertinoPicker> {
           ),
           child: ConstrainedBox(
             constraints: BoxConstraints.expand(
-              // height: height,
+              height: widget.itemExtent,
               width: widget.highlighterBorderWidth,
             ),
             child: selectionOverlay,
@@ -344,7 +344,7 @@ class CupertinoPickerDefaultSelectionOverlay extends StatelessWidget {
           start: capStartEdge ? radius : Radius.zero,
           end: capEndEdge ? radius : Radius.zero,
         ),
-        color: Colors.transparent,
+        color: CupertinoDynamicColor.resolve(background, context),
       ),
     );
   }

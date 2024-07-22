@@ -279,7 +279,9 @@ class TicketItem extends StatelessWidget {
                             child: CustomPaint(
                                 foregroundPainter: BorderPainter(
                                     frameSFactor: .05, padding: -8),
-                                child: SvgPicture.string(barcode)),
+                                child: SvgPicture.string(
+                                  barcode,
+                                )),
                           )
                               // Container(
                               //   height: 50,

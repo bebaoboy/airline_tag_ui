@@ -331,6 +331,40 @@ class BottomPickerState extends State<BottomPicker>
                       animation: animation,
                       child: widget.pickerTitle),
                 ),
+                Align(
+                  alignment: const Alignment(0.8, 0),
+                  child: Opacity(
+                    opacity: 0.1,
+                    child: AnimatedTile(
+                      chainCurve: const Interval(
+                        0.3,
+                        0.7,
+                        curve: Curves.ease,
+                      ),
+                      slide: slide[1],
+                      animation: animation,
+                      child: RotatedBox(
+                        quarterTurns: 1,
+                        child: RichText(
+                          text: TextSpan(
+                            text: DateFormat("dd MMMM yyyy").format(
+                                widget.items![selectedItemIndex]),
+                            style: DefaultTextStyle.of(context).style.copyWith(
+                                color: Colors.white,
+                                fontSize: 72,
+                                letterSpacing: 12.0),
+                            // children: [
+                            //   // WidgetSpan(
+                            //   //   child: RotatedBox(
+                            //   //       quarterTurns: -1, child: Text('😃')),
+                            //   // )
+                            // ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 Padding(
                     padding: const EdgeInsets.only(right: 40, top: 20),
                     child: AnimatedTile(
