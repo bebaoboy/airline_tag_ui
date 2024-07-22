@@ -2,12 +2,19 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class TicketItem extends StatelessWidget {
   final String barcode;
   final void Function() onTap;
   final Color backgroundColor;
-  const TicketItem({super.key, required this.barcode, required this.onTap, required this.backgroundColor});
+  final DateTime time;
+  const TicketItem(
+      {super.key,
+      required this.barcode,
+      required this.onTap,
+      required this.backgroundColor,
+      required this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +174,10 @@ class TicketItem extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Column(
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Date',
                                       style: TextStyle(
                                         color: Colors.black,
@@ -178,8 +185,8 @@ class TicketItem extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      '04 Mar 2019',
-                                      style: TextStyle(
+                                      DateFormat("dd MMM yyyy").format(time),
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -189,10 +196,10 @@ class TicketItem extends StatelessWidget {
                                 ),
                                 InkWell(
                                   onTap: onTap,
-                                  child: const Column(
+                                  child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Time',
                                         style: TextStyle(
                                           color: Colors.black,
@@ -200,8 +207,8 @@ class TicketItem extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        '14:45',
-                                        style: TextStyle(
+                                        DateFormat("HH:mm").format(time),
+                                        style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,

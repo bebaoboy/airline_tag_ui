@@ -12,6 +12,8 @@ class SimplePicker extends StatefulWidget {
   final TextStyle? selectedTextStyle;
   final double itemExtent;
   final Widget? selectionOverlay;
+  final double scale;
+  final bool endEffect;
   const SimplePicker({
     super.key,
     required this.items,
@@ -21,6 +23,8 @@ class SimplePicker extends StatefulWidget {
     this.selectedTextStyle,
     required this.itemExtent,
     this.selectionOverlay,
+    this.scale = 1.0,
+    required this.endEffect,
   });
   @override
   State<SimplePicker> createState() => _SimplePickerState();
@@ -50,6 +54,8 @@ class _SimplePickerState extends State<SimplePicker> {
       },
       blendMode: BlendMode.dstOut,
       child: CustomCupertinoPicker.builder(
+        scrollPhysics:
+            widget.endEffect ? const NeverScrollableScrollPhysics() : null,
         itemExtent: widget.itemExtent,
         diameterRatio: 5,
         childCount: widget.items.length,
@@ -64,23 +70,35 @@ class _SimplePickerState extends State<SimplePicker> {
         itemBuilder: (context, index) {
           print(widget.selectedItemIndex);
           return Center(
-            child: AnimatedDefaultTextStyle(
-              style: (widget.selectedItemIndex == index
-                      ? widget.selectedTextStyle
-                      : (widget.selectedItemIndex - index).abs() == 1
+              child: widget.selectedItemIndex == index
+                  ? Transform.scale(
+                      scale: widget.scale,
+                      child: AnimatedDefaultTextStyle(
+                        style: widget.selectedTextStyle!.copyWith(
+                            letterSpacing: 1.0,
+                            fontWeight:
+                                widget.endEffect ? FontWeight.w900 : null,
+                                fontSize: widget.endEffect ? 18 : null
+                            ),
+                        duration: Durations.medium4,
+                        child: Text(
+                          widget.items[index],
+                        ),
+                      ),
+                    )
+                  : AnimatedDefaultTextStyle(
+                      style: (widget.selectedItemIndex - index).abs() == 1
                           ? widget.selectedTextStyle!.copyWith(
                               color: widget.textStyle.color,
                               fontWeight: FontWeight.w600,
                               fontSize: widget.textStyle.fontSize! * 1.2,
                               backgroundColor: Colors.transparent)
-                          : widget.textStyle)!
-                  .copyWith(letterSpacing: 1.0),
-              duration: Durations.medium4,
-              child: Text(
-                widget.items[index],
-              ),
-            ),
-          );
+                          : widget.textStyle.copyWith(letterSpacing: 1.0),
+                      duration: Durations.medium2,
+                      child: Text(
+                        widget.items[index],
+                      ),
+                    ));
         },
       ),
     );
@@ -326,7 +344,7 @@ class CupertinoPickerDefaultSelectionOverlay extends StatelessWidget {
           start: capStartEdge ? radius : Radius.zero,
           end: capEndEdge ? radius : Radius.zero,
         ),
-        color: CupertinoDynamicColor.resolve(background, context),
+        color: Colors.transparent,
       ),
     );
   }

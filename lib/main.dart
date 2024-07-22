@@ -116,6 +116,8 @@ class _TicketPageState extends State<TicketPage> {
     // Save the image
   }
 
+  DateTime time = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -134,19 +136,24 @@ class _TicketPageState extends State<TicketPage> {
       ),
       width: double.infinity,
       child: TicketItem(
+        time: time,
         barcode: barcode,
-        backgroundColor: Color.fromARGB(255, 37, 94, 227),
+        backgroundColor: const Color.fromARGB(255, 37, 94, 227),
         onTap: () {
           _openSimpleItemPicker(
-              context,
-              getHoursInBetween(
-                      DateTime.now().subtract(const Duration(days: 3)),
-                      DateTime.now().add(const Duration(days: 3)))
-                  .map(
-                    (e) =>
-                        "${DateFormat("HH:mm a").format(e)} - ${DateFormat("HH:mm a").format(e.add(const Duration(hours: 1)))}",
-                  )
-                  .toList());
+                  context,
+                  getHoursInBetween(DateTime.now(),
+                          DateTime.now().add(const Duration(days: 3)))
+                      .toList())
+              .then(
+            (value) {
+              if (value != null) {
+                setState(() {
+                  time = value;
+                });
+              }
+            },
+          );
         },
       ),
       // Image.network(
@@ -174,10 +181,11 @@ class _TicketPageState extends State<TicketPage> {
     );
   }
 
-  int index = 5;
+  int index = 0;
 
-  void _openSimpleItemPicker(BuildContext context, List<String> items) {
-    BottomPicker(
+  Future<DateTime?> _openSimpleItemPicker(
+      BuildContext context, List<DateTime> items) {
+    return BottomPicker(
       itemExtent: 100,
       selectedItemIndex: index,
       items: items,

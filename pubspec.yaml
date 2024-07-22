@@ -36,7 +36,6 @@ dependencies:
   cupertino_icons: any
   bottom_picker: any
   intl: any
-  widget_and_text_animator: any
   barcode: any
   flutter_svg: any
 

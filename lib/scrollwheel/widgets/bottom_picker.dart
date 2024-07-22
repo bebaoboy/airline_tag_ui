@@ -7,6 +7,7 @@ import 'package:airline_tag_ui/scrollwheel/widgets/simple_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:airline_tag_ui/scrollwheel/resources/extensions.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 export 'package:airline_tag_ui/scrollwheel/resources/time.dart';
 
 // ignore: must_be_immutable
@@ -63,7 +64,7 @@ class BottomPicker extends StatefulWidget {
   final EdgeInsetsGeometry titlePadding;
   final Alignment? titleAlignment;
   final bool dismissable;
-  late List<String>? items;
+  late List<DateTime>? items;
   late Function(dynamic)? onChange;
   late Function(dynamic)? onSubmit;
   final Function? onClose;
@@ -103,8 +104,8 @@ class BottomPicker extends StatefulWidget {
   final Color? buttonSingleColor;
   final List<Color>? gradientColors;
   final BoxDecoration? buttonStyle;
-  void show(BuildContext context) {
-    showModalBottomSheet(
+  Future<DateTime?> show(BuildContext context) {
+    return showModalBottomSheet<DateTime>(
       context: context,
       isDismissible: dismissable,
       enableDrag: false,
@@ -140,6 +141,9 @@ class BottomPickerState extends State<BottomPicker>
   late AnimationController animationController;
   late Animation<double> animation;
 
+  // This controller is responsible for the animation
+  late AnimationController _animate;
+
   void startAnimation() {
     //if you want to call it again, e.g. after pushing and popping
     //a screen, you will need to reset to 0. Otherwise won't work.
@@ -150,6 +154,8 @@ class BottomPickerState extends State<BottomPicker>
   @override
   void dispose() {
     animationController.dispose();
+    _animate.dispose();
+
     super.dispose();
   }
 
@@ -169,6 +175,15 @@ class BottomPickerState extends State<BottomPicker>
         parent: animationController, curve: Curves.fastOutSlowIn);
 
     startAnimation();
+    _animate = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 300),
+        reverseDuration: const Duration(milliseconds: 200),
+        lowerBound: 1,
+        upperBound: 1.2)
+      ..addListener(() {
+        setState(() {});
+      });
 
     super.initState();
     if (widget.bottomPickerType == BottomPickerType.simple) {
@@ -185,32 +200,47 @@ class BottomPickerState extends State<BottomPicker>
   bool exit = false;
   TextStyle? _selectedTextStyle;
 
+  void _onBounce() {
+    //Firing the animation right away
+    _animate.forward();
+
+    //Now reversing the animation after the user defined duration
+    Future.delayed(const Duration(milliseconds: 400), () {
+      _animate.reverse();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (scrollNotification is ScrollStartNotification) {
           // _onStartScroll(scrollNotification.metrics);
+          exit = false;
           return true;
         } else if (scrollNotification is ScrollUpdateNotification) {
           // _onUpdateScroll(scrollNotification.metrics);
           return true;
         } else if (scrollNotification is ScrollEndNotification) {
-          if (!exit) {
-            exit = true;
-            Future.delayed(const Duration(seconds: 2), () {
-              print(widget.items![selectedItemIndex]);
-              Navigator.of(context).pop();
-            });
-            Future.delayed(const Duration(milliseconds: 500), () {
-              setState(() {
-                _selectedTextStyle = widget.selectedTextStyle?.copyWith(
-                    color: Colors.blue,
-                    fontSize: 20,
-                    backgroundColor: Colors.white);
+          Future.delayed(const Duration(milliseconds: 1500), () {
+            if (!exit) {
+              exit = true;
+              Future.delayed(const Duration(seconds: 2), () {
+                print(widget.items![selectedItemIndex]);
+                if (mounted) {
+                  Navigator.of(context).pop(widget.items![selectedItemIndex]);
+                }
               });
-            });
-          }
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (mounted) {
+                  setState(() {
+                    _onBounce();
+                  });
+                }
+              });
+            }
+          });
+
           return true;
         }
         return false;
@@ -345,7 +375,14 @@ class BottomPickerState extends State<BottomPicker>
                               child: widget.bottomPickerType ==
                                       BottomPickerType.simple
                                   ? SimplePicker(
-                                      items: widget.items!,
+                                      scale: _animate.value,
+                                      endEffect: exit,
+                                      items: widget.items!
+                                          .map(
+                                            (e) =>
+                                                "${DateFormat("HH:mm a").format(e)} - ${DateFormat("HH:mm a").format(e.add(const Duration(hours: 1)))}",
+                                          )
+                                          .toList(),
                                       onChange: (int index) {
                                         selectedItemIndex = index;
                                         setState(() {});
